@@ -1,12 +1,20 @@
 require("./config/database").connect();
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const cors = require("cors");
 const express = require("express");
+const jwt = require("jsonwebtoken");
+
+const auth = require("./middleware/auth");
 const User = require("./model/user");
 
 const app = express();
 
-app.use(express.json());
+app.use(cors());
+const corsOptions = {
+  origin: 'http://example.com',
+  optionsSuccessStatus: 200 // for some legacy browsers
+}
+app.use(express.json({ limit: "50mb" }));
 
 app.post("/register", async (req, res) => {
    try {
@@ -72,6 +80,10 @@ app.post("/login", async (req, res) => {
     console.log(err);
     res.status(500).send("Internal Server Error:  " + JSON.stringify(err));
   }
+});
+
+app.post("/welcome", cors(corsOptions), auth, (req, res) => {
+  res.status(200).send("Welcome to FreeCodeCamp 🙌");
 });
 
 module.exports = app;
