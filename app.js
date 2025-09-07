@@ -1,5 +1,6 @@
-require("dotenv").config();
 require("./config/database").connect();
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const express = require("express");
 const User = require("./model/user");
 
