@@ -1,0 +1,45 @@
+networks:
+  eetz-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+    
+services:
+  mongo:
+    networks:
+      - eetz-network
+    image: mongo:noble
+    ports:
+      - '27017:27017'
+    container_name:  amped-rockstar-dyspohoria
+    restart: always
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+    env_file:
+      - ./.env
+    volumes:
+      - ./config/db-entrypoint.js:/docker-entrypoint-initdb.d/db-entrypoint.js:ro
+      - mongo-data:/var/lib/mongo-data
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=${MONGO_INITDB_DATABASE} --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_interval: 30s
+      start_period: 10s
+
+volumes:
+  mongo-data:
+    # For the mongo-data volume, permissions should be 0755 or 0700.
+    # The owner should match the user running MongoDB inside the container.
+    # The official MongoDB image runs as user 'mongodb' (UID 999) by default.
+    # To set correct ownership, run on your host:
+    #   sudo chown -R $(whoami):wheel /tmp/mongo-data
+    #   sudo chmod -R 0700 /tmp/mongo-data
+    driver: local
+    driver_opts:
+      type: 'none'
+      device: '/var/lib/mongo-data'
+      o: 'bind'
