@@ -1,6 +1,6 @@
 require('@dotenvx/dotenvx').config();
 const auth = require('../middleware/auth');
-const invitation = require('../model/invitation');
+const Invitation = require('../model/invitation');
 
 module.exports = function (app, corsOptions) {
   // Create a new invitation
@@ -12,7 +12,7 @@ module.exports = function (app, corsOptions) {
         return res.status(400).send('Invite email is required');
       }
 
-      const newInvitation = await invitation.create({
+      const newInvitation = await Invitation.create({
         creator_id,
         invite_email,
       });
@@ -28,7 +28,10 @@ module.exports = function (app, corsOptions) {
   app.get('/invitation/:code', auth, async (req, res) => {
     try {
       const { code } = req.params;
-      const invite = await invitation.findOne({ invite_code: code });
+      const invite = await Invitation.findOne({
+        invite_code: code,
+        uses: { $lte: 1 },
+      });
       if (!invite) {
         return res.status(404).send('Invitation not found');
       }
@@ -43,17 +46,25 @@ module.exports = function (app, corsOptions) {
   app.put('/invitation/:code', auth, async (req, res) => {
     try {
       const { code } = req.params;
-      const invite = await invitation.findOne({ invite_code: code });
+      const invite = await Invitation.findOne({
+        invite_code: code,
+        uses: { $lte: 1 },
+      });
       if (!invite) {
         return res.status(404).send('Invitation not found');
       }
-      const updatedUses = invite.uses + 1;
-      const result = await invitation.updateOne({invite_code: invite.invite_code}, { uses: updatedUses })
+      // const updatedUses = '';
+      const result = await Invitation.updateOne(
+        { invite_code: invite.invite_code },
+        { uses: invite.uses + 1 },
+      );
       console.log(JSON.stringify(result));
       return res.status(204).send();
     } catch (err) {
       console.log(err);
-      return res.status(500).send('Internal Server Error:  ' + JSON.stringify(err));
+      return res
+        .status(500)
+        .send('Internal Server Error:  ' + JSON.stringify(err));
     }
-  }); 
+  });
 };
