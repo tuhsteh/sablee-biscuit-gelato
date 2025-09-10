@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const cuid = require('cuid');
 
 const invitationSchema = new mongoose.Schema({
-  _id: { type: String, default: new mongoose.Types.ObjectId },
+  _id: { type: String, default: new mongoose.Types.ObjectId() },
   created_at: { type: String, default: new Date(Date.now()) },
   expires_at: {
     type: String,
