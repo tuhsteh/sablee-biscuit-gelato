@@ -18,11 +18,9 @@ module.exports = function (app, corsOptions) {
       if (oldUser) {
         return res.status(409).send('User already exists. Please login.');
       }
-      const invite = await Invitation.findOne(
-        {and: [
-          {invite_email: email},
-          {invite_code: inviteCode}
-        ]});
+      const invite = await Invitation.findOne({
+        and: [{ invite_email: email }, { invite_code: inviteCode }],
+      });
       if (!invite) {
         return res.status(400).send('You must be invited to join');
       }
