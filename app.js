@@ -1,11 +1,6 @@
 require('./config/database').connect();
-const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const express = require('express');
-const jwt = require('jsonwebtoken');
-
-const auth = require('./middleware/auth');
-const User = require('./model/user');
 
 const app = express();
 
@@ -18,4 +13,5 @@ app.use(express.json({ limit: '50mb' }));
 
 require('./routes/userRoutes')(app, corsOptions);
 require('./routes/invitationRoutes')(app, corsOptions);
+
 module.exports = app;
