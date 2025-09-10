@@ -1,89 +1,21 @@
-require("./config/database").connect();
-const bcrypt = require("bcryptjs");
-const cors = require("cors");
-const express = require("express");
-const jwt = require("jsonwebtoken");
+require('./config/database').connect();
+const bcrypt = require('bcryptjs');
+const cors = require('cors');
+const express = require('express');
+const jwt = require('jsonwebtoken');
 
-const auth = require("./middleware/auth");
-const User = require("./model/user");
+const auth = require('./middleware/auth');
+const User = require('./model/user');
 
 const app = express();
 
 app.use(cors());
 const corsOptions = {
   origin: 'http://example.com',
-  optionsSuccessStatus: 200 // for some legacy browsers
-}
-app.use(express.json({ limit: "50mb" }));
+  optionsSuccessStatus: 200, // for some legacy browsers
+};
+app.use(express.json({ limit: '50mb' }));
 
-app.post("/register", async (req, res) => {
-   try {
-    const { firstName, lastName, email, password } = req.body;
-
-    if (!(email && password && firstName && lastName)) {
-      res.status(400).send("All input is required");
-    }
-    const oldUser = await User.findOne({ email });
-    if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
-    }
-
-    encryptedUserPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
-      first_name: firstName,
-      last_name: lastName,
-      email: email.toLowerCase(), // sanitize
-      password: encryptedUserPassword,
-    });
-
-    const token = jwt.sign(
-      { user_id: user._id, email },
-      process.env.TOKEN_KEY,
-      {
-        expiresIn: "5h",
-      }
-    );
-    user.token = token;
-
-    res.status(201).json(user);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Internal Server Error:  " + JSON.stringify(err));
-  }
-});
-
-
-app.post("/login", async (req, res) => {
-   try {
-    const { email, password } = req.body;
-
-    if (!(email && password)) {
-      res.status(400).send("All input is required");
-    }
-    const user = await User.findOne({ email });
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "5h",
-        }
-      );
-      user.token = token;
-
-      return res.status(200).json(user);
-    }
-    return res.status(400).send("Invalid Credentials");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Internal Server Error:  " + JSON.stringify(err));
-  }
-});
-
-app.post("/welcome", cors(corsOptions), auth, (req, res) => {
-  res.status(200).send("Welcome to FreeCodeCamp 🙌");
-});
+require('./routes/userRoutes')(app, corsOptions);
 
 module.exports = app;

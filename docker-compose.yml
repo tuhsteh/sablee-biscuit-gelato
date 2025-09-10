@@ -2,8 +2,8 @@ networks:
   eetz-network:
     driver: bridge
     driver_opts:
-      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
-    
+      com.docker.network.bridge.host_binding_ipv4: '127.0.0.1'
+
 services:
   mongo:
     networks:
@@ -11,7 +11,7 @@ services:
     image: mongo:noble
     ports:
       - '27017:27017'
-    container_name:  amped-rockstar-dyspohoria
+    container_name: amped-rockstar-dyspohoria
     restart: always
     logging:
       driver: 'json-file'
