@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 const cuid = require('cuid');
 
 const invitationSchema = new mongoose.Schema({
-  created_at: { type: String, default: mongoose.now() },
+  _id: { type: String, default: new mongoose.Types.ObjectId },
+  created_at: { type: String, default: new Date(Date.now()) },
   expires_at: {
     type: String,
-    default: mongoose.now() + 7 * 24 * 60 * 60 * 1000,
+    default: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   }, // 7 days from creation
   invite_email: { type: String, required: true },
   invite_code: { type: String, default: cuid(), required: true },

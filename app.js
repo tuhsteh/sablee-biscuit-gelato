@@ -17,5 +17,5 @@ const corsOptions = {
 app.use(express.json({ limit: '50mb' }));
 
 require('./routes/userRoutes')(app, corsOptions);
-
+require('./routes/invitationRoutes')(app, corsOptions);
 module.exports = app;

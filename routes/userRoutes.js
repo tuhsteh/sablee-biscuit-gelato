@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const auth = require('../middleware/auth');
 const User = require('../model/user');
+const Invitation = require('../model/invitation');
 
 module.exports = function (app, corsOptions) {
   app.post('/register', async (req, res) => {
@@ -15,7 +16,15 @@ module.exports = function (app, corsOptions) {
       }
       const oldUser = await User.findOne({ email });
       if (oldUser) {
-        return res.status(409).send('User Already Exist. Please Login');
+        return res.status(409).send('User already exists. Please login.');
+      }
+      const invite = await Invitation.findOne(
+        {and: [
+          {invite_email: email},
+          {invite_code: inviteCode}
+        ]});
+      if (!invite) {
+        return res.status(400).send('You must be invited to join');
       }
 
       encryptedUserPassword = await bcrypt.hash(password, 10);
@@ -25,6 +34,7 @@ module.exports = function (app, corsOptions) {
         last_name: lastName,
         email: email.toLowerCase(), // TODO:  sanitize
         password: encryptedUserPassword,
+        invite_code: inviteCode,
       });
 
       const token = jwt.sign(
