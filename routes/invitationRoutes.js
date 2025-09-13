@@ -1,6 +1,7 @@
 require('@dotenvx/dotenvx').config();
 const auth = require('../middleware/auth');
 const Invitation = require('../model/invitation');
+const cuid = require('cuid');
 
 module.exports = function (app, corsOptions) {
   // Create a new invitation
@@ -13,8 +14,11 @@ module.exports = function (app, corsOptions) {
       }
 
       const newInvitation = await Invitation.create({
+        created_at: new Date(),
+        expires_at: new Date(Date.now() + 7*24*60*60*1000),
         creator_id,
         invite_email,
+        invite_code: cuid(),
       });
 
       res.status(201).json(newInvitation);

@@ -10,7 +10,6 @@ module.exports = function (app, corsOptions) {
   app.post('/register', async (req, res) => {
     try {
       const { firstName, lastName, email, password, inviteCode } = req.body;
-
       if (!(email && password && firstName && lastName && inviteCode)) {
         res.status(400).send('All input is required');
       }
@@ -18,9 +17,11 @@ module.exports = function (app, corsOptions) {
       if (oldUser) {
         return res.status(409).send('User already exists. Please login.');
       }
-      const invite = await Invitation.findOne({
-        and: [{ invite_email: email }, { invite_code: inviteCode }],
-      });
+
+      const invite = await Invitation.findOne(
+        { invite_email: email },
+        { invite_code: inviteCode },
+      );
       if (!invite) {
         return res.status(400).send('You must be invited to join');
       }
@@ -70,7 +71,12 @@ module.exports = function (app, corsOptions) {
         );
         user.token = token;
 
-        return res.status(200).json(user);
+        let userCopy = JSON.parse(JSON.stringify(user));      
+        delete userCopy.password;
+        delete userCopy._id;
+        console.log(`User:  ${JSON.stringify(userCopy)}`);
+        
+        return res.status(200).json(userCopy);
       }
       return res.status(400).send('Invalid Credentials');
     } catch (err) {

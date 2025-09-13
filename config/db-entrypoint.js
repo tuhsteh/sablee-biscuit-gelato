@@ -14,7 +14,7 @@ const adminPassword = process.env.MONGO_INITDB_ROOT_PASSWORD;
 const dbName = process.env.MONGODB_DB;
 const dbUserName = process.env.MONGODB_USERNAME;
 const dbPassword = process.env.MONGODB_PASSWORD;
-const collectionName = 'Invitations';
+const collectionName = 'invitations';
 const startAdminEmail = process.env.start_admin_email;
 const startInviteCode = process.env.start_invite_code;
 //
