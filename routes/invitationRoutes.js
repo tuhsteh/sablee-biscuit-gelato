@@ -15,7 +15,7 @@ module.exports = function (app, corsOptions) {
 
       const newInvitation = await Invitation.create({
         created_at: new Date(),
-        expires_at: new Date(Date.now() + 7*24*60*60*1000),
+        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         creator_id,
         invite_email,
         invite_code: cuid(),
