@@ -4,13 +4,14 @@ Application for Creating a Weekly Calendar for Meal Planning. Includes recipes, 
 
 ## TODOs
 
-- [x] make readme
+- [x] make README
+- [ ] maintain README, `nas`!
 
 ### App Development
 
 - [ ] Security
   - [ ] App Hardening (see [How to Harden Your Node.js APIs](https://www.freecodecamp.org/news/how-to-harden-your-nodejs-apis-security-best-practices/))
-  - [ ] SSL (start with [Let'sEncrypt](https://letsencrypt.org))
+  - [x] ~~SSL (start with [Let'sEncrypt](https://letsencrypt.org))~~ obviated by the hosting provider
 - [ ] API for
   - [x] users (registration, login, me)
   - [ ] families (with user membership, recipe sharing, etc)
@@ -28,10 +29,10 @@ Application for Creating a Weekly Calendar for Meal Planning. Includes recipes, 
 ### Infrastructure
 
 - [ ] nail version numbers in place
-- [ ] SSL (see [Let'sEncrypt](https://letsencrypt.org), or option provided by hosting service)
+- [x] ~~SSL (see [Let'sEncrypt](https://letsencrypt.org), or option provided by hosting service)~~ the host will take care of this for me
 - [x] Database (using MongoDB, but lots of hosting offers PostGRES primarily; can use JSON data type; requires migration/code-adaptation)
-- [ ] injectable JSON data for initialization of a new install (e.g. `yarn init` => writes data from `roles.json` into database)
-- [ ] containerization
+- [x] ~~injectable JSON data for initialization of a new install (e.g. `yarn init` => writes data from `roles.json` into database)~~ Setup db-entrypoint.js to create one user and one Invitation, so you can register and get into your app after first deployment
+- [x] containerization
 - [ ] hosting (see [Render](https://render.com/), [Heroku](https://www.heroku.com/), other options)
 
 ### Testing
