@@ -9,10 +9,10 @@ services:
     networks:
       - eetz-network
     image: mongo:noble
+    restart: always
+    container_name: amped-rockstar-dyspohoria
     ports:
       - '27017:27017'
-    container_name: amped-rockstar-dyspohoria
-    restart: always
     logging:
       driver: 'json-file'
       options:
@@ -24,7 +24,7 @@ services:
       - mongo-data:/var/lib/mongo-data
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=${MONGO_INITDB_DATABASE} --quiet
-      interval: 30s
+      interval: 300s
       timeout: 10s
       retries: 5
       start_interval: 30s
