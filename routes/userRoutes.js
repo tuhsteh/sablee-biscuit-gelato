@@ -74,8 +74,6 @@ module.exports = function (app, corsOptions) {
         let userCopy = JSON.parse(JSON.stringify(user));
         delete userCopy.password;
         delete userCopy._id;
-        console.log(`User:  ${JSON.stringify(userCopy)}`);
-
         return res.status(200).json(userCopy);
       }
       return res.status(400).send('Invalid Credentials');

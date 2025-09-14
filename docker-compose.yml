@@ -20,7 +20,7 @@ services:
     env_file:
       - .env
     volumes:
-      # - ./config/db-entrypoint.js:/docker-entrypoint-initdb.d/db-entrypoint.js:ro
+      - ./config/db-entrypoint.js:/docker-entrypoint-initdb.d/db-entrypoint.js:ro
       - mongo-data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=${MONGO_INITDB_DATABASE} --quiet
