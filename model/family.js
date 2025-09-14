@@ -20,19 +20,9 @@ const familySchema = new mongoose.Schema({
   },
   family_members: {
     type: Array,
-    required: true
+    required: true,
   }, // by email; eventually, that email may be a user.
   creator_id: { type: String, required: true },
 });
 
 module.exports = mongoose.model('family', familySchema);
-
-// exports.familyModel = mongoose.model('family', familySchema);
-// exports.familyCreateCountLimit = 10;
-
-// const familyModel = mongoose.model('family', familySchema);
-// const familyCreateCountLimit = 10;
-// module.exports = {
-//   familyModel,
-//   familyCreateCountLimit,
-// }
