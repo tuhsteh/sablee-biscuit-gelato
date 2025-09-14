@@ -45,7 +45,7 @@ module.exports = function (app, corsOptions) {
       );
       user.token = token;
 
-      res.status(201).json(user);
+      res.status(201).json(sanitizeUserResponse(user));
     } catch (err) {
       console.log(err);
       res.status(500).send('Internal Server Error:  ' + JSON.stringify(err));
@@ -71,10 +71,7 @@ module.exports = function (app, corsOptions) {
         );
         user.token = token;
 
-        let userCopy = JSON.parse(JSON.stringify(user));
-        delete userCopy.password;
-        delete userCopy._id;
-        return res.status(200).json(userCopy);
+        return res.status(200).json(sanitizeUserResponse(user));
       }
       return res.status(400).send('Invalid Credentials');
     } catch (err) {
@@ -88,6 +85,13 @@ module.exports = function (app, corsOptions) {
   });
 
   app.post('/me', cors(corsOptions), auth, (req, res) => {
-    res.status(200).json(req.user);
+    res.status(200).json(sanitizeUserResponse(req.user));
   });
 };
+
+function sanitizeUserResponse(user) {
+  let userCopy = JSON.parse(JSON.stringify(user));
+  delete userCopy.password;
+  delete userCopy._id;
+  return userCopy;
+}
