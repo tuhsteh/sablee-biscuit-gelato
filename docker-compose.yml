@@ -18,10 +18,10 @@ services:
       options:
         max-size: '10m'
     env_file:
-      - ./.env
+      - .env
     volumes:
-      - ./config/db-entrypoint.js:/docker-entrypoint-initdb.d/db-entrypoint.js:ro
-      - mongo-data:/var/lib/mongo-data
+      # - ./config/db-entrypoint.js:/docker-entrypoint-initdb.d/db-entrypoint.js:ro
+      - mongo-data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=${MONGO_INITDB_DATABASE} --quiet
       interval: 300s
@@ -38,8 +38,9 @@ volumes:
     # To set correct ownership, run on your host:
     #   sudo chown -R $(whoami):wheel /tmp/mongo-data
     #   sudo chmod -R 0700 /tmp/mongo-data
+    name: mongo-data
     driver: local
     driver_opts:
-      type: 'none'
-      device: '/var/lib/mongo-data'
-      o: 'bind'
+      o: bind
+      type: none
+      device: /var/lib/mongo-data/
