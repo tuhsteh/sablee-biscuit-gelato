@@ -8,6 +8,7 @@ const { Config } = require('prettier');
 const config = {
   arrowParens: 'always',
   bracketSameLine: true,
+  printWidth: 89,
   semi: true,
   singleQuote: true,
   tabWidth: 2,

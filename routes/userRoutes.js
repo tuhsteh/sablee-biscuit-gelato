@@ -36,13 +36,9 @@ module.exports = function (app, corsOptions) {
         invite_code: inviteCode,
       });
 
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: '5h',
-        },
-      );
+      const token = jwt.sign({ user_id: user._id, email }, process.env.TOKEN_KEY, {
+        expiresIn: '5h',
+      });
       user.token = token;
 
       res.status(201).json(sanitizeUserResponse(user));
@@ -62,13 +58,9 @@ module.exports = function (app, corsOptions) {
       const user = await User.findOne({ email });
 
       if (user && (await bcrypt.compare(password, user.password))) {
-        const token = jwt.sign(
-          { user_id: user._id, email },
-          process.env.TOKEN_KEY,
-          {
-            expiresIn: '5h',
-          },
-        );
+        const token = jwt.sign({ user_id: user._id, email }, process.env.TOKEN_KEY, {
+          expiresIn: '5h',
+        });
         user.token = token;
 
         return res.status(200).json(sanitizeUserResponse(user));

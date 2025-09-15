@@ -8,7 +8,7 @@ const createFamilyCountLimit = 10;
 
 module.exports = function (app, corsOptions) {
   // Create a new Family.
-  app.post('/family', auth, cors(corsOptions), async (req, res) => {
+  app.post('/family', auth, async (req, res) => {
     try {
       const { familyName } = req.body;
       const { user_id } = req.user;
@@ -43,7 +43,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Add a new email to a Family Members list.
-  app.put('/family', auth, cors(corsOptions), async (req, res) => {
+  app.put('/family', auth, async (req, res) => {
     try {
       const { email, familyName } = req.body;
       const { user_id } = req.user;
@@ -61,9 +61,7 @@ module.exports = function (app, corsOptions) {
         if (1 < existingFamilies.length) {
           return res
             .status(409)
-            .send(
-              'You have several families with that last name.  Support TBD',
-            );
+            .send('You have several families with that last name; Support TBD');
         }
         const fam = existingFamilies[0];
         fam.family_members.push(email);
@@ -77,7 +75,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Get my family list.
-  app.get('/family', auth, cors(corsOptions), async (req, res) => {
+  app.get('/family', auth, async (req, res) => {
     try {
       const family_name = null;
       const { user_id } = req.user;
@@ -86,16 +84,14 @@ module.exports = function (app, corsOptions) {
         return res.status(200).json(foundFamily);
       }
 
-      return res
-        .status(404)
-        .send('You do not appear to have started any families');
+      return res.status(404).send('You do not appear to have started any families');
     } catch (err) {
       return res.status(500).send('Error getting your family list');
     }
   });
 
   // Get my family by name.
-  app.get('/family/:family_name', auth, cors(corsOptions), async (req, res) => {
+  app.get('/family/:family_name', auth, async (req, res) => {
     try {
       const { family_name } = req.params;
       const { user_id } = req.user;
@@ -106,22 +102,33 @@ module.exports = function (app, corsOptions) {
       } else if (foundFamily.length > 0) {
         return res.status(200).json(foundFamily);
       }
-      return res
-        .status(404)
-        .send("You haven't started a family with that name");
+      return res.status(404).send("You haven't started a family with that name");
     } catch (err) {
       return res.status(500).send('Error getting your family list');
     }
   });
 
-  app.delete(
-    '/family/:family_name',
-    auth,
-    cors(corsOptions),
-    async (req, res) => {
-      //TODO
-    },
-  );
+  // Delete one family by name.
+  app.delete('/family/:family_name', auth, async (req, res) => {
+    try {
+      const { family_name } = req.params;
+      const { user_id } = req.user;
+
+      const foundFamily = await findFamilies(family_name, user_id);
+      if (!(foundFamily && foundFamily[0])) {
+        return res.status(404).send("You haven't started a family with that name");
+      } else if (foundFamily.length > 1) {
+        return res
+          .status(409)
+          .send('You have several families with that last name; Support TBD');
+      }
+      await Family.findById(foundFamily[0]._id).deleteOne();
+      return res.status(204).send();
+    } catch (err) {
+      console.log(JSON.stringify(err));
+      return res.status(500).send('Error deleting a family');
+    }
+  });
 };
 
 const findFamilies = async function (family_name_filter, user_id) {

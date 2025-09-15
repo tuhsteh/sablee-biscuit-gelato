@@ -66,9 +66,7 @@ module.exports = function (app, corsOptions) {
       return res.status(204).send();
     } catch (err) {
       console.log(err);
-      return res
-        .status(500)
-        .send('Internal Server Error:  ' + JSON.stringify(err));
+      return res.status(500).send('Internal Server Error:  ' + JSON.stringify(err));
     }
   });
 };
