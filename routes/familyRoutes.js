@@ -8,17 +8,13 @@ const createFamilyCountLimit = 10;
 
 module.exports = function (app, corsOptions) {
   // Create a new Family.
-  app.post('/family', auth, async (req, res) => {
+  app.post('/family', auth, cors(corsOptions), async (req, res) => {
     try {
       const { familyName } = req.body;
       const { user_id } = req.user;
       if (!familyName) {
         res.status(400).send('Name is required');
       }
-      // console.log(`Name:    ${JSON.stringify(familyName)}`);
-      // console.log(`UserID:  ${JSON.stringify(user_id)}`);
-      // console.log(`Name:    ${JSON.stringify(typeof familyName)}`);
-      // console.log(`UserID:  ${JSON.stringify(typeof user_id)}`);
 
       // TODO:  check that a user is within Family Create Quota
 
@@ -37,13 +33,12 @@ module.exports = function (app, corsOptions) {
       });
       return res.status(201).json(result);
     } catch (err) {
-      console.log(`Error in general:  ${JSON.stringify(err)}`);
       return res.status(500).send();
     }
   });
 
   // Add a new email to a Family Members list.
-  app.put('/family', auth, async (req, res) => {
+  app.put('/family', auth, cors(corsOptions), async (req, res) => {
     try {
       const { email, familyName } = req.body;
       const { user_id } = req.user;
@@ -75,7 +70,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Get my family list.
-  app.get('/family', auth, async (req, res) => {
+  app.get('/family', auth, cors(corsOptions), async (req, res) => {
     try {
       const family_name = null;
       const { user_id } = req.user;
@@ -91,7 +86,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Get my family by name.
-  app.get('/family/:family_name', auth, async (req, res) => {
+  app.get('/family/:family_name', auth, cors(corsOptions), async (req, res) => {
     try {
       const { family_name } = req.params;
       const { user_id } = req.user;
@@ -109,7 +104,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Delete one family by name.
-  app.delete('/family/:family_name', auth, async (req, res) => {
+  app.delete('/family/:family_name', auth, cors(corsOptions), async (req, res) => {
     try {
       const { family_name } = req.params;
       const { user_id } = req.user;
