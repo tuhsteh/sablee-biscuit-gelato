@@ -14,11 +14,11 @@ Application for Creating a Weekly Calendar for Meal Planning. Includes recipes, 
   - [x] ~~SSL (start with [Let'sEncrypt](https://letsencrypt.org))~~ obviated by the hosting provider
 - [ ] API for
   - [x] users (registration, login, me)
-  - [ ] families (with user membership, recipe sharing, etc)
+  - [x] families (with user membership, recipe sharing, etc)
   - [ ] recipe CRUD
   - [ ] schedule CRUD
   - [ ] shopping list CRUD
-  - [ ] management (invitations, family members)
+  - [x] management (invitations, family members)
 - [ ] UIs for
   - [ ] user sign-up/login
   - [ ] recipes
