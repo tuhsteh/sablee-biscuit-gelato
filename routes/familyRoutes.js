@@ -44,6 +44,35 @@ module.exports = function (app, corsOptions) {
 
   // Add a new email to a Family Members list.
   app.put('/family', auth, cors(corsOptions), async (req, res) => {
-    // TODO
+    try {
+      const { email, familyName } = req.body;
+      const { user_id } = req.user;
+      if (!(email && familyName)) {
+        res.status(400).send('All input is required');
+      }
+
+      const existingFamilies = await Family.find({
+        family_name: familyName,
+      });
+      if (0 == existingFamilies.length) {
+        return res.status(404).send("That family hasn't been started");
+      }
+      if (existingFamilies) {
+        if (1 < existingFamilies.length) {
+          return res
+            .status(409)
+            .send(
+              'You have several families with that last name.  Support TBD',
+            );
+        }
+        const fam = existingFamilies[0];
+        fam.family_members.push(email);
+        await fam.save();
+        return res.status(201).json(fam);
+      }
+    } catch (err) {
+      console.log(`Error adding new family member:  ${err}`);
+      return res.status(500).send('Error adding new family member');
+    }
   });
 };
