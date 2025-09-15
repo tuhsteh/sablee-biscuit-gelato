@@ -75,4 +75,34 @@ module.exports = function (app, corsOptions) {
       return res.status(500).send('Error adding new family member');
     }
   });
+
+  // Get my families.
+  app.get('/family/:family_name', auth, cors(corsOptions), async (req, res) => {
+    try {
+      const { family_name } = req.params;
+      const { user_id } = req.user;
+      if (!family_name) {
+        return res.status(400).send('All input is required');
+      }
+
+      const oldFamily = await Family.find({ family_name, creator_id: user_id });
+      if (oldFamily && oldFamily.length > 0) {
+        return res.status(200).json(oldFamily);
+      }
+      return res
+        .status(404)
+        .send('You do not appear to have started any families');
+    } catch (err) {
+      return res.status(500).send('Error getting your family list');
+    }
+  });
+
+  app.delete(
+    '/family/:family_name',
+    auth,
+    cors(corsOptions),
+    async (req, res) => {
+      //TODO
+    },
+  );
 };
