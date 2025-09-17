@@ -6,9 +6,9 @@ const User = require('../model/user');
 
 const createFamilyCountLimit = 10;
 
-module.exports = function (app, corsOptions) {
+module.exports = function (app, corsOpt) {
   // Create a new Family.
-  app.post('/family', auth, cors(corsOptions), async (req, res) => {
+  app.post('/family', auth, cors(corsOpt), async (req, res) => {
     try {
       const { familyName } = req.body;
       const { user_id } = req.user;
@@ -38,7 +38,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Add a new email to a Family Members list.
-  app.put('/family', auth, cors(corsOptions), async (req, res) => {
+  app.put('/family', auth, cors(corsOpt), async (req, res) => {
     try {
       const { email, familyName } = req.body;
       const { user_id } = req.user;
@@ -64,13 +64,13 @@ module.exports = function (app, corsOptions) {
         return res.status(201).json(fam);
       }
     } catch (err) {
-      console.log(`Error adding new family member:  ${err}`);
+      console.log(`Error adding new family member:  ${JSON.stringify(err)}`);
       return res.status(500).send('Error adding new family member');
     }
   });
 
   // Get my family list.
-  app.get('/family', auth, cors(corsOptions), async (req, res) => {
+  app.get('/family', auth, cors(corsOpt), async (req, res) => {
     try {
       const family_name = null;
       const { user_id } = req.user;
@@ -86,7 +86,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Get my family by name.
-  app.get('/family/:family_name', auth, cors(corsOptions), async (req, res) => {
+  app.get('/family/:family_name', auth, cors(corsOpt), async (req, res) => {
     try {
       const { family_name } = req.params;
       const { user_id } = req.user;
@@ -104,7 +104,7 @@ module.exports = function (app, corsOptions) {
   });
 
   // Delete one family by name.
-  app.delete('/family/:family_name', auth, cors(corsOptions), async (req, res) => {
+  app.delete('/family/:family_name', auth, cors(corsOpt), async (req, res) => {
     try {
       const { family_name } = req.params;
       const { user_id } = req.user;
@@ -120,7 +120,7 @@ module.exports = function (app, corsOptions) {
       await Family.findById(foundFamily[0]._id).deleteOne();
       return res.status(204).send();
     } catch (err) {
-      console.log(JSON.stringify(err));
+      console.log(`Error deleting a family:  ${JSON.stringify(err)}`);
       return res.status(500).send('Error deleting a family');
     }
   });
