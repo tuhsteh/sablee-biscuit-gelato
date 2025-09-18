@@ -64,7 +64,7 @@ module.exports = function (app, corsOpt) {
         return res.status(201).json(fam);
       }
     } catch (err) {
-      console.log(`Error adding new family member:  ${JSON.stringify(err)}`);
+      console.log(`Error adding new family member:  ${err}`);
       return res.status(500).send('Error adding new family member');
     }
   });
@@ -120,7 +120,7 @@ module.exports = function (app, corsOpt) {
       await Family.findById(foundFamily[0]._id).deleteOne();
       return res.status(204).send();
     } catch (err) {
-      console.log(`Error deleting a family:  ${JSON.stringify(err)}`);
+      console.log(`Error deleting a family:  ${err}`);
       return res.status(500).send('Error deleting a family');
     }
   });
