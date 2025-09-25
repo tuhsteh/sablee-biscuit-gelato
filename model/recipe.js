@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// schema
 const recipeSchema = new mongoose.Schema({
   title: { type: String, required: true, default: '' },
   url: { type: String, required: false, default: '' },
@@ -11,5 +10,4 @@ const recipeSchema = new mongoose.Schema({
   swaps: { type: Number, required: true, default: 0 }, // how often someone hit replay
 });
 
-// export model.
 module.exports = mongoose.model('recipe', recipeSchema);
