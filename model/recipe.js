@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const unit = ['tsp', 'Tbsp', 'c', 'qt', 'gal', 'ea.', 'oz', 'lb', 'g', 'kg', 'mL', 'L'];
+
 const recipeSchema = new mongoose.Schema({
   title: { type: String, required: true, default: '' },
   url: { type: String, required: false, default: '' },
@@ -11,3 +13,12 @@ const recipeSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('recipe', recipeSchema);
+
+// ingredients[] will need to be
+// [
+//   {
+//     ingredient: Ingredient, (has to be by Id, right?)
+//     quantity: Number,
+//     units: unit
+//   }, ...
+// ]
