@@ -31,15 +31,13 @@ module.exports = function (app, corsOpt) {
       const foundRecipes = await Recipe.find({ title, creator_id: user_id });
 
       if (!(foundRecipes && foundRecipes[0])) {
-        return res
-          .status(404)
-          .send("You haven't cooked a recipe with that title");
+        return res.status(404).send("You haven't cooked a recipe with that title");
       } else if (foundRecipes.length > 1) {
         return res
           .status(409)
           .send('You have several recipes with that title; Support TBD');
       }
-      return res.status(200).send(foundRecipes[0]);
+      return res.status(200).json(foundRecipes[0]);
     } catch (err) {
       console.log(`Error reading recipes:  ${err}`);
       return res.status(500).send('Error reading recipes');
@@ -53,9 +51,7 @@ module.exports = function (app, corsOpt) {
       const foundRecipes = await Recipe.find({ title, creator_id: user_id });
 
       if (!(foundRecipes && foundRecipes[0])) {
-        return res
-          .status(404)
-          .send("You haven't cooked a recipe with that title");
+        return res.status(404).send("You haven't cooked a recipe with that title");
       } else if (foundRecipes.length > 1) {
         return res
           .status(409)
