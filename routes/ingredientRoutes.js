@@ -25,6 +25,9 @@ module.exports = function (app, corsOpt) {
         name,
         creator_id: user_id,
       });
+      if (!foundIngredient || 0 == foundIngredient.length) {
+        return res.status(404).send();
+      }
       if (1 < foundIngredient.length) {
         console.log(
           `Found multiple Ingredients by that name:  ${foundIngredient.length}`,
