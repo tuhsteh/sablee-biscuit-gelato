@@ -7,31 +7,33 @@ module.exports = function (app, corsOpt) {
   app.get('/recipe', auth, cors(corsOpt), async (req, res) => {
     try {
       const recipes = await Recipe.find();
-      return res.status(200).JSON(recipes);
+      return res.status(200).json(recipes);
     } catch (err) {
       console.log(`Error reading recipes:  ${err}`);
       return res.status(500).send('Error reading recipes');
     }
   });
 
-  app.get('/recipe/:id', auth, cors(corsOpt), async (req, res) => {
+  app.get('/recipe/id/:id', auth, cors(corsOpt), async (req, res) => {
     try {
       const recipes = await Recipe.findById(req.params.id);
-      return res.status(200).JSON(recipes);
+      return res.status(200).json(recipes);
     } catch (err) {
       console.log(`Error reading recipes:  ${err}`);
       return res.status(500).send('Error reading recipes');
     }
   });
 
-  app.get('/recipe/:title', auth, cors(corsOpt), async (req, res) => {
+  app.get('/recipe/title/:title', auth, cors(corsOpt), async (req, res) => {
     try {
       const { title } = req.params;
       const { user_id } = req.user;
       const foundRecipes = await Recipe.find({ title, creator_id: user_id });
 
       if (!(foundRecipes && foundRecipes[0])) {
-        return res.status(404).send("You haven't cooked a recipe with that title");
+        return res
+          .status(404)
+          .send("You haven't cooked a recipe with that title");
       } else if (foundRecipes.length > 1) {
         return res
           .status(409)
@@ -51,7 +53,9 @@ module.exports = function (app, corsOpt) {
       const foundRecipes = await Recipe.find({ title, creator_id: user_id });
 
       if (!(foundRecipes && foundRecipes[0])) {
-        return res.status(404).send("You haven't cooked a recipe with that title");
+        return res
+          .status(404)
+          .send("You haven't cooked a recipe with that title");
       } else if (foundRecipes.length > 1) {
         return res
           .status(409)
