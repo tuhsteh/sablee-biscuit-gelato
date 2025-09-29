@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const unit = ['tsp', 'Tbsp', 'c', 'qt', 'gal', 'ea.', 'oz', 'lb', 'g', 'kg', 'mL', 'L'];
+// const unit = ['tsp', 'Tbsp', 'c', 'qt', 'gal', 'ea.', 'oz', 'lb', 'g', 'kg', 'mL', 'L'];
+const unit = require('./ingredient');
 
 const recipeSchema = new mongoose.Schema({
   title: { type: String, required: true, default: '' },

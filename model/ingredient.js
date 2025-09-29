@@ -1,19 +1,21 @@
 // how do we make one Mongoose Model/Schema use another custom type???
 const mongoose = require('mongoose');
 
-const category = [
-  'baking',
-  'beverage',
-  'bread',
-  'bulk',
-  'canned',
-  'dairy',
-  'deli',
-  'frozen',
-  'meat',
-  'produce',
-  'staples',
-];
+// const category = [
+//   'baking',
+//   'beverage',
+//   'bread',
+//   'bulk',
+//   'canned',
+//   'dairy',
+//   'deli',
+//   'frozen',
+//   'meat',
+//   'produce',
+//   'staples',
+// ];
+
+const category = require('./category');
 
 const ingredientSchema = new mongoose.Schema({
   name: { type: String, required: true, default: '' },
